@@ -1,0 +1,134 @@
+﻿@{
+    /**/
+
+    /**/
+
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>美和易思网课助手</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://www.layuicdn.com/layer/layer.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            layer.alert("本程序仅供学习交流");
+
+            $("#login_btn").click(function () {
+                var login_name = $("#login_name").val();
+                var login_pass = $("#login_pass").val();
+                if (login_name == "" || login_pass == "") {
+                    return layer.msg("请输入完整！");
+                }
+
+                $.ajax({
+                    url: "/api/mhys/coursequery",
+                    type: "get",
+                    data: { login_name: login_name, login_pass: login_pass },
+                    dataType: "json",
+                    success: function (data) {
+                        layer.alert(data["UserName"] + "欢迎您");
+                        $.cookie("uid", data["UserId"]);
+                        console.info($.cookie("uid"));
+                        console.info(data["UserId"]);
+                        $("#page1").hide();
+                        $("#page2").show();
+                        $.each(data["CourseInfoList"], function (x, y) {
+                            $("#SelectCourse").append('<option value="' + y.Id + '">' + y.Name + '</option>');
+                        });
+                    },
+                    error: function () {
+                        return layer.msg("发生错误！");
+                    }
+                });
+            });
+
+            $("#SelectCourse").change(function () {
+                $("#SelectChapter").html('<option value="0" selected>选择章节</option>');
+                var id = $(this).val();
+                $.ajax({
+                    url: "/api/mhys/chapterquery",
+                    type: "get",
+                    data: { id: id },
+                    dataType: "json",
+                    success: function (data) {
+                        $.each(data["data"], function (x, y) {
+                            $("#SelectChapter").append('<option value="' + y.id + '">' + y.dir_name + '</option>');
+                        });
+                    },
+                    error: function () {
+                        return layer.msg("发生错误！");
+                    }
+                });
+            });
+
+            $("#startBrush_btn").click(function () {
+                if ($("#SelectCourse option:selected").val() == 0 || $("#SelectChapter option:selected").val() == 0)
+                    return layer.msg("请选择课程章节");
+
+                window.open('/home/play?' + 'courseId=' + $("#SelectCourse option:selected").val() + '&chapterid=' + $("#SelectChapter option:selected").val() + "&uid=" + $.cookie("uid"));
+            });
+
+        });
+
+    </script>
+</head>
+<body>
+    <div class="container col-xs-12 col-sm-10 col-md-8 col-lg-6 center-block">
+        <div class="card mt-5">
+            <div class="card-header">
+                <span class="card-title">美和易思网课助手</span>
+                <a href="http://www.zejang.cn">熊沐风同学的博客</a>
+            </div>
+            <div class="card-body">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="http://q4.qlogo.cn/headimg_dl?dst_uin=1648545292&spec=100" width="80" style="border-radius:50%" />
+                    </div>
+                </div>
+                <div id="page1">
+                    <div class="input-group mb-3 mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">账号</span>
+                        </div>
+                        <input id="login_name" placeholder="mooc账号" type="text" class="form-control">
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">密码</span>
+                        </div>
+                        <input id="login_pass" placeholder="mooc密码" type="text" class="form-control">
+                    </div>
+                    <input id="login_btn" type="button" class="btn btn-primary btn-block" value="登录获取" />
+                </div>
+                <div class="mb-3 mt-2" id="page2" style="display:none">
+                    <div class="input-group  mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">课程</span>
+                        </div>
+                        <select id="SelectCourse" class="form-control">
+                            <option value="0" selected>选择课程</option>
+                        </select>
+                    </div>
+                    <div class="input-group  mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">章节</span>
+                        </div>
+                        <select id="SelectChapter" class="form-control">
+                            <option value="0" selected>选择章节</option>
+                        </select>
+                    </div>
+                    <input id="startBrush_btn" type="button" class="btn btn-primary btn-block" value="立即刷课" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
