@@ -13,7 +13,7 @@ namespace MhysHelper.Common
             {
                 return new SqlSugarClient(new ConnectionConfig()
                 {
-                    ConnectionString = "Server=localhost;Database=MhysHelperDB;Uid=mhyshelper;Pwd=xiongjie520",
+                    ConnectionString = "",
                     DbType = DbType.MySql,
                     IsAutoCloseConnection = true,
                     InitKeyType = InitKeyType.Attribute
