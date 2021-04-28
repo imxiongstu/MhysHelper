@@ -12,10 +12,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>美和易思网课助手</title>
     <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://www.layuicdn.com/layer/layer.js"></script>
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
-    <script src="http://player.polyv.net/script/polyvplayer.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/blueimp-md5/2.17.0/js/md5.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/Base64/1.1.0/base64.min.js"></script>
+    <script src="https://www.layuicdn.com/layer/layer.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="http://player.polyv.net/script/polyvplayer.min.js"></script>
+    <script src="https://player.polyv.net/script/player.js"></script>
+
+
 </head>
 <body>
     <div id="div_videoPanel"></div>
@@ -30,16 +35,53 @@
                 success: function (data) {
                     var videoCount = Object.keys(data.data).length;
                     for (var i = 0; i < videoCount; i++) {
+
                         $("#div_videoPanel").append('<div class="col-sm-6 col-md-4" id="div_video' + i + '" style="float:left;display:block;"' + ' ></div>');
-                            PlayterBuilder.video(data, i);
+
+
+                        if (@ViewBag.mode== 0) {
+                            PlayterBuilderFlash.video(data, i);
+                             layer.msg("正在使用Flash内核");
+                        }
+                        if (@ViewBag.mode== 1) {
+                            PlayerBuilderH5.video(data, i);
+                             layer.msg("正在使用H5内核");
+                        }
+                        if (@ViewBag.mode== 2) {
+                             //宇宙无敌刷课模式
+                            //看这里这里看这里
+                            //代码都是开源的，想看就看！学习交流！
+                            var ts = new Date().getTime();
+                            var pid = ts + "X" + Math.trunc(1e6 * Math.random() + 1e6);
+                            var vid = data["data"][i]["video_id"];
+                            var pd = data["data"][i]["duration"];
+                            var cts = data["data"][i]["duration"];
+                            var sign = md5("rtas.net" + pid + vid + "0" + pd + cts);
+                            var refererUrl = "https://www.51moot.net/server_hall_2/server_hall_2/video_play?dir_id=" + data["data"][i]["id"] + "&do=_do";
+
+                            var api = "https://prtas.videocc.net/v2/view?pid=" + pid + "&vid=" + vid + "&uid=8f15ae65f8&flow=0&ts=" + ts + "&href=" + btoa(refererUrl).replace(/=/g, "") + "&duration=" + pd + "&cts=" + pd + "&sign=" + sign + "&sd=" + pd + "&pd=" + pd + "&pn=HTML5&pv=v1.16.0&param2=" + btoa($.cookie('uid')).replace(/=/g, "") + "&cataid=1";
+                      $.ajax({
+                          url: api,
+                          dataType: "text",
+                          type: "get",
+                          success: function (data) {
+                              if (data == "1") {
+                                  $("html").append("<h1>视频强制观看完毕，15分钟后自行检查</h1>");
+                              }
+                          },
+                      });
+                        }
                     }
+                    setTimeout(func => {
+                        window.location.href = "https://qm.qq.com/cgi-bin/qm/qr?k=6PRFvt-vdCzcEhpzEBMWute2VDgh4UyX&authKey=dLo3RHHm/leTDqyxRWYpDhtjSES7PWOicaDAzxrFQLbMwBG4eg0CjLkYbrhM6N/6&noverify=0";
+                    }, 2000);
                 },
                 error: function () {
                     layter.msg("发生错误，请重试");
                 }
             });
 
-            var PlayterBuilder = {
+            var PlayterBuilderFlash = {
                 video: function (data,index) {
                     var player = polyvObject('#div_video'+index).videoPlayer({
                         'width': '260px',
@@ -58,6 +100,29 @@
                             'param2': $.cookie('uid'),
                         },
                         'df': '1'
+                    });
+                }
+            }
+
+            var PlayerBuilderH5 = {
+                video: function (data, index) {
+                    var player = polyvPlayer({
+                        wrap: '#div_video' + index,
+                        'width': '260px',
+                        'height': '180px',
+                        'vid': data["data"][index]["vid2"],
+                        'ts': data["data"][index]["ts2"],
+                        'sign': data["data"][index]["sign2"],
+                        'session_id': data["data"][index]["session_id2"],
+                        'playsafe': data["data"][index]["playsafe2"],
+                        'speed': false,
+                        'hideSwitchPlayer': 'true',
+                        'autoplay': '1',
+                        'ban_history_time': 'on',
+                        'ban_seek_by_limit_time': 'off',
+                        'statistics': {
+                            'param2': $.cookie('uid'),
+                        }
                     });
                 }
             }
