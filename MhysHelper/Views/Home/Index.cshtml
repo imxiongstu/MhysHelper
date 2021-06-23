@@ -1,4 +1,4 @@
-﻿@{
+﻿﻿@{
     /**/
 
     Layout = null;
@@ -32,7 +32,7 @@
     <script type="text/javascript">
         $(function () {
 
-            layer.alert("【百度搜：美和易思助手】</br>★本程序仅供学子学习交流</br>★欢迎访问我的博客！</br>学习QQ群：703759054</br>仅供观看完毕系统却没统计进度时使用。</br>仅供观看完毕系统却没统计进度时使用。</br>仅供观看完毕系统却没统计进度时使用。</br>学习是自己的事情，自我探索，永远是真理。");
+            layer.alert("【学习/接单/招聘Q群：703759054】</br>【百度搜：美和易思助手】</br>【如有侵权，联系立马停站！】</br>★本程序仅供学子学习交流</br>★欢迎访问我的博客！</br>学习QQ群：703759054</br>仅供观看完毕系统却没统计进度时使用。</br>仅供观看完毕系统却没统计进度时使用。</br>仅供观看完毕系统却没统计进度时使用。</br>学习是自己的事情，自我探索，永远是真理。");
 
 
             $("#login_btn").click(function () {
@@ -156,12 +156,12 @@
             <div class="card-body">
                 <div class="card">
                     <div class="card-body">
-                        <img src="http://q4.qlogo.cn/headimg_dl?dst_uin=1648545292&spec=100" width="80" style="border-radius:50%;" /><br />
-                        <span class="badge badge-primary">累积使用人数：@ViewBag.totalCount</span>
-                        <span class="badge badge-danger">累积使用次数：@ViewBag.useCount</span>
+                        <img src="http://cdn.zejang.cn/Self/QQ%E6%88%AA%E5%9B%BE20201007214853.jpg" style="width:90%;margin:0 auto" /><br />
+                        <span class="badge badge-primary" style="display:none;">累积使用人数：@ViewBag.totalCount</span>
+                        <span class="badge badge-danger" style="display:none;">累积使用次数：@ViewBag.useCount</span>
                     </div>
                     <div style="background:rgba(0,0,0,.03)">
-                        <pre>【程序设计初衷是为了给系统没统计进度的同学使用！】<br />【请自觉观看MOOC进行学习，未统计进度时再使用本工具。】<br />通知:<br />2020-09-02.更换数据库为MySQL.ORM框架为SqlSugar。<br />2020-08-18.新增一键秒刷模式。<br />2020-07-15.修复JS代码失效问题。<br />2020-07-03.获取MOOT考试答案，仅供学习交流。<br />2020-06-23.优化逻辑、增加H5模式刷课、更快更稳更强。<br />2020-06-09.修复源站未备案，获取不到信息的问题。</pre>
+                        <pre>【程序设计初衷是为了给系统没统计进度的同学使用！】<br />【请自觉观看MOOC进行学习，未统计进度时再使用本工具。】<br />通知:<br />2021-02-25.修复CSRF问题。<br />2020-09-02.更换数据库为MySQL.ORM框架为SqlSugar。<br />2020-08-18.新增一键秒刷模式。<br />2020-07-15.修复JS代码失效问题。<br />2020-06-23.优化逻辑、增加H5模式刷课、更快更稳更强。<br />2020-06-09.修复源站未备案，获取不到信息的问题。</pre>
                     </div>
                 </div>
                 <div id="page1">
@@ -207,7 +207,7 @@
                         </select>
                     </div>
                     <input id="startBrush_btn" type="button" class="btn btn-primary btn-block" value="立即刷课" />
-                    <input id="hiddenfunc_btn" type="button" class="mt-2 btn btn-info" value="隐藏功能" />
+                    <input id="hiddenfunc_btn" type="button" class="mt-2 btn btn-info" value="隐藏功能" style="display:none;" />
                 </div>
             </div>
         </div>
@@ -224,7 +224,7 @@
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body">
-                            大一的时候就写了简单JS版本的刷课，也分析了一些网页协议和Andoird端的协议，但并没有深入研究，直到在某课程下面发现了另一个学校的同学做的一个刷课网站，令人佩服不已，他用PHP编写，我用C#编写，很多问题困扰很久，每次听君一言，胜读十年书的感觉，非常感谢能够有他的帮助。这是我最后一个版本的刷课了，程序已经开源，自取。如果你热爱编程，你可以加入我的QQ群，我们一起学习。<br />【程序设计初衷是为了给系统没统计进度的同学使用！希望合理利用工具！学习是自己的事情！！！】
+                            这是我最后一个版本的刷课了，程序已经开源，自取。如果你热爱编程，你可以加入我的QQ群，我们一起学习。<br />【程序设计初衷是为了给系统没统计进度的同学使用！希望合理利用工具！学习是自己的事情！！！】
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
@@ -251,13 +251,13 @@
 
     </div>
 
-    <!--右边留言菜单-->
+    <!--右边学习菜单-->
     <div id="Drawer" v-bind:style="myHeight" class="d-flex flex-row col-lg-4 col-md-5" style="position:fixed;top:0px;">
         <div v-show="isShow" style="width:100%;height:100%;background-color:lightgray;">
-            <iframe style="width:100%;height:100%" src="http://www.zejang.cn/%e7%bd%91%e7%ab%99%e7%95%99%e8%a8%80"></iframe>
+            <iframe style="width:100%;height:100%" src="http://www.zejang.cn"></iframe>
         </div>
         <div v-on:click="Tip" style="width:35px;height:100px;background-color:red;margin-top:36%;cursor:pointer;border-radius:5px;text-align:center">
-            <h3 style="margin-top:50%;color:azure">留<br />言</h3>
+            <h3 style="margin-top:50%;color:azure">学<br />习</h3>
         </div>
     </div>
     <script>
@@ -265,7 +265,7 @@
             el: "#Drawer",
             data: {
                 isShow: false,
-                myHeight:""
+                myHeight: ""
             },
             methods: {
                 Tip: function () {
@@ -275,7 +275,7 @@
                     } else {
                         this.myHeight = "height:0%";
                     }
-                    
+
                     layer.msg("有什么好的建议，可以直接提出来哟！");
                 }
             }

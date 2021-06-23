@@ -233,5 +233,22 @@ namespace MhysHelper.Controllers
         }
 
 
+        /// <summary>
+        /// 只是为了解决跨域问题特此设置的方法
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public string HttpRequestCors([FromBody] string url)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "Get";
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                string result = reader.ReadToEnd();
+                return result;
+            }
+        }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 @{
     /**/
 
@@ -61,26 +61,33 @@
 
                             var api = "https://prtas.videocc.net/v2/view?pid=" + pid + "&vid=" + vid + "&uid=8f15ae65f8&flow=0&ts=" + ts + "&href=" + btoa(refererUrl).replace(/=/g, "") + "&duration=" + pd + "&cts=" + pd + "&sign=" + sign + "&sd=" + pd + "&pd=" + pd + "&pn=HTML5&pv=v1.16.0&param2=" + btoa($.cookie('uid')).replace(/=/g, "") + "&cataid=1";
                       $.ajax({
-                          url: api,
+                          url: "/api/mhys/HttpRequestCors",
                           dataType: "text",
-                          type: "get",
+                          data: { "": api},
+                          type: "post",
+                          async: false,
                           success: function (data) {
-                              if (data == "1") {
-                                  $("html").append("<h1>视频强制观看完毕，15分钟后自行检查</h1>");
+                              if (data == '"1"') {
+                                  $("div").append("<h1>视频强制观看完毕，15分钟后自行检查</h1>");
+                                  $("div").append("<h1>欢迎加群学习交流(外快、就业、学习、资源)，请稍后！！！！！！！！！</h1>");
                               }
                           },
                       });
                         }
                     }
-                    setTimeout(func => {
+                    if (@ViewBag.mode== 2){
+                                            setTimeout(func => {
                         window.location.href = "https://qm.qq.com/cgi-bin/qm/qr?k=6PRFvt-vdCzcEhpzEBMWute2VDgh4UyX&authKey=dLo3RHHm/leTDqyxRWYpDhtjSES7PWOicaDAzxrFQLbMwBG4eg0CjLkYbrhM6N/6&noverify=0";
-                    }, 2000);
+                    }, 3000);
+                    }
+
                 },
                 error: function () {
                     layter.msg("发生错误，请重试");
                 }
             });
 
+            //Flash模式的代码
             var PlayterBuilderFlash = {
                 video: function (data,index) {
                     var player = polyvObject('#div_video'+index).videoPlayer({
@@ -104,6 +111,7 @@
                 }
             }
 
+            //H5模式的代码
             var PlayerBuilderH5 = {
                 video: function (data, index) {
                     var player = polyvPlayer({
