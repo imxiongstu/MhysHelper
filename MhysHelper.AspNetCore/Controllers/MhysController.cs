@@ -1,27 +1,25 @@
-﻿using System;
+﻿using MhysHelper.AspNetCore.Models;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using Newtonsoft.Json;
-using System.IO;
-using Newtonsoft.Json.Linq;
-using MhysHelper.Models;
-using System.Text;
-using System.Web;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
-namespace MhysHelper.Controllers
+namespace MhysHelper.AspNetCore.Controllers
 {
-    public class MhysController : ApiController
+    [Route("api/[controller]/[action]")]
+    public class MhysController : Controller
     {
-        /*
-         By：熊沐风同学
-         QQ：1648545292
-         博客：www.zejang.cn
-         写个锤子，不写了，不更新了，难受，不搞了，重新看网课，后面两个月都没学习了，重新看网课！！！！
-        */
+        /*************************************************************************
+           By：熊沐风同学
+           QQ：1648545292
+           博客：www.zejang.cn
+           写个锤子，不写了，不更新了，难受，不搞了，重新看网课，后面两个月都没学习了，重新看网课！！！！
+          ****************************************************************************/
 
         private static string url_api = "http://39.105.204.53/";
         private static string url_api2 = "https://www.51moot.net/";
@@ -64,6 +62,7 @@ namespace MhysHelper.Controllers
             }
             courseIdList = System.Web.HttpUtility.UrlEncode(courseIdList);
             JObject courseInfoData = JObject.Parse(GetUrlContent(url_api + "api//v1/course_info?&id_list=" + courseIdList + "&user_id=" + userId + "&sign=" + sign));
+            myUserInfo.CourseInfoList = new List<CourseInfo>();
             for (int i = 0; i < courseInfoData["data"].Count(); i++)
             {
                 myUserInfo.CourseInfoList.Add(new CourseInfo
@@ -74,8 +73,6 @@ namespace MhysHelper.Controllers
             }
             myUserInfo.UserId = LoginInfo["data"]["id"].ToString();
             myUserInfo.UserName = LoginInfo["data"]["name"].ToString();
-
-
             return myUserInfo;
         }
 
@@ -85,10 +82,10 @@ namespace MhysHelper.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public JObject ChapterQuery(string id)
+        public string ChapterQuery(string id)
         {
             JObject ChapterInfoData = JObject.Parse(GetUrlContent(url_api + "api//v1/course_dirctory?course_id=" + id + "&sign=" + sign));
-            return ChapterInfoData;
+            return ChapterInfoData.ToString();
         }
 
         /// <summary>
@@ -100,7 +97,7 @@ namespace MhysHelper.Controllers
         [HttpGet]
         public object GetVideoInfo(string courseId, string chapterId, string uid)
         {
-            JObject ChapterInfoData = ChapterQuery(courseId);
+            JObject ChapterInfoData = JObject.Parse(ChapterQuery(courseId));
             int index = 0;
             for (int i = 0; i < ChapterInfoData["data"].Count(); i++)
             {
@@ -136,7 +133,7 @@ namespace MhysHelper.Controllers
             }
             VideoJobject.Add("uid", uid);
             VideoJobject.Add("data", j);
-            return VideoJobject;
+            return VideoJobject.ToString();
         }
 
         public JObject GetExamAnswer(string examid)
@@ -210,7 +207,7 @@ namespace MhysHelper.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public string HttpRequestCors([FromBody] string url)
+        public string HttpRequestCors(string url)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "Get";
@@ -221,6 +218,5 @@ namespace MhysHelper.Controllers
                 return result;
             }
         }
-
     }
 }

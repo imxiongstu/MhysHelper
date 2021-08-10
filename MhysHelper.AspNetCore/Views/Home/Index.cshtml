@@ -1,0 +1,280 @@
+﻿
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>美和易思网课助手</title>
+    <meta name="keywords" content="泽酱 熊沐风同学 美和易思 美和易思助手  美和易思网课 美和易思刷课">
+    <meta name="description" content="泽酱 熊沐风同学 美和易思 美和易思助手 美和易思网课 美和易思刷课" />
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://blog-static.cnblogs.com/files/7qin/md5.js"></script>
+    <script src="https://www.layuicdn.com/layer/layer.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.9/vue.js"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?32a0ab1ffd60c217be14b59f8d6090fd";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <script type="text/javascript">
+        $(function () {
+
+            layer.alert("【学习/接单/招聘Q群：703759054】</br>【百度搜：美和易思助手】</br>【如有侵权，联系立马停站！】</br>★本程序仅供学子学习交流</br>★欢迎访问我的博客！</br>学习QQ群：703759054</br>仅供观看完毕系统却没统计进度时使用。</br>仅供观看完毕系统却没统计进度时使用。</br>仅供观看完毕系统却没统计进度时使用。</br>学习是自己的事情，自我探索，永远是真理。");
+
+
+            $("#login_btn").click(function () {
+                var login_name = $("#login_name").val();
+                var login_pass = $("#login_pass").val();
+                if (login_name == "" || login_pass == "") {
+                    return layer.msg("请输入完整！");
+                }
+                layer.msg("正在登陆...");
+
+                $.ajax({
+                    url: "/api/mhys/coursequery",
+                    type: "get",
+                    data: { login_name: login_name, login_pass: login_pass },
+                    dataType: "json",
+                    success: function (data) {
+                        layer.alert("亲爱的" + data["UserName"] + "同学欢迎您");
+                        $.cookie("uid", data["UserId"]);
+                        console.info($.cookie("uid"));
+                        console.info(data["UserId"]);
+                        $("#page1").hide();
+                        $("#page2").show();
+                        $.each(data["CourseInfoList"], function (x, y) {
+                            $("#SelectCourse").append('<option value="' + y.Id + '">' + y.Name + '</option>');
+                        });
+                    },
+                    error: function () {
+                        return layer.msg("发生错误！");
+                    }
+                });
+            });
+
+
+            $("#SelectCourse").change(function () {
+                $("#SelectChapter").html('<option value="0" selected>选择章节</option>');
+                var id = $(this).val();
+                $.ajax({
+                    url: "/api/mhys/chapterquery",
+                    type: "get",
+                    data: { id: id },
+                    dataType: "json",
+                    success: function (data) {
+                        $.each(data["data"], function (x, y) {
+                            $("#SelectChapter").append('<option value="' + y.id + '">' + y.dir_name + '</option>');
+                        });
+                    },
+                    error: function () {
+                        return layer.msg("发生错误！");
+                    }
+                });
+            });
+
+
+            $("#startBrush_btn").click(function () {
+                if ($("#SelectCourse option:selected").val() == 0 || $("#SelectChapter option:selected").val() == 0)
+                    return layer.msg("请选择课程章节");
+
+                var mode = $("#SelectMode option:selected").val();
+                window.open('/home/play?' + 'courseId=' + $("#SelectCourse option:selected").val() + '&chapterid=' + $("#SelectChapter option:selected").val() + "&uid=" + $.cookie("uid") + "&mode=" + mode);
+            });
+
+
+            var isHidden = true;
+            $("#hiddenfunc_btn").click(function () {
+                if (isHidden) {
+                    $("#page3").show();
+                    isHidden = false;
+                }
+                else {
+                    $("#page3").hide();
+                    isHidden = true;
+                }
+            });
+
+
+            $("#getexamanswer_btn").click(function () {
+                var examid = $("#examid_tb").val();
+                $.ajax({
+                    url: "/api/mhys/GetExamAnswer",
+                    type: "get",
+                    data: { examid: examid },
+                    dataType: "json",
+                    success: function (data) {
+                        $.each(data["Data"], function (x, y) {
+                            var item_lists = new Array();
+                            var answer_lists = new Array();
+                            item_lists = y.item_list.split("[{@@}]");
+                            answer_lists = y.answer_list.split("[{@@}]");
+                            // answer_lists = y.answer_list.replace(/\[{@@}\]/g, "---");
+                            for (var i = 0; i < answer_lists.length; i++) {
+                                if (answer_lists[i] == "0") {
+                                    answer_lists[i] = "A";
+                                }
+                                if (answer_lists[i] == "1") {
+                                    answer_lists[i] = "B";
+                                }
+                                if (answer_lists[i] == "2") {
+                                    answer_lists[i] = "C";
+                                }
+                                if (answer_lists[i] == "3") {
+                                    answer_lists[i] = "D";
+                                }
+                            }
+                            var html = '<ul class="list-group mt-2"><li class="list-group-item list-group-item-info">【第' + eval(x + 1) + '题】' + y.Title + '</li ><li class="list-group-item list-group-item-danger">' + item_lists[0] + '</li><li class="list-group-item list-group-item-danger">' + item_lists[1] + '</li><li class="list-group-item list-group-item-danger">' + item_lists[2] + '</li><li class="list-group-item list-group-item-danger">' + item_lists[3] + '</li><li class="list-group-item list-group-item-success">正确答案：' + answer_lists + '</li></ul >';
+                            $("#answers").append(html);
+                        });
+                    }
+                });
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <div class="container col-xs-12 col-sm-10 col-md-8 col-lg-6 center-block">
+        <div class="card mt-5">
+            <div class="card-header">
+                <span class="card-title">美和易思网课助手</span>
+                <a href="http://www.zejang.cn">熊沐风同学的博客</a>
+            </div>
+            <div class="card-body">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="./file/logo.jpg" style="width:90%;margin:0 auto" /><br />
+                        <span class="badge badge-primary" style="display:none;">累积使用人数：@ViewBag.totalCount</span>
+                        <span class="badge badge-danger" style="display:none;">累积使用次数：@ViewBag.useCount</span>
+                    </div>
+                    <div style="background:rgba(0,0,0,.03)">
+                        <pre>【程序设计初衷是为了给系统没统计进度的同学使用！】<br />【请自觉观看MOOC进行学习，未统计进度时再使用本工具。】<br />通知:<br />2021-02-25.修复CSRF问题。<br />2020-09-02.更换数据库为MySQL.ORM框架为SqlSugar。<br />2020-08-18.新增一键秒刷模式。<br />2020-07-15.修复JS代码失效问题。<br />2020-06-23.优化逻辑、增加H5模式刷课、更快更稳更强。<br />2020-06-09.修复源站未备案，获取不到信息的问题。</pre>
+                    </div>
+                </div>
+                <div id="page1">
+                    <div class="input-group mb-3 mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">账号</span>
+                        </div>
+                        <input id="login_name" placeholder="mooc账号" type="text" class="form-control">
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">密码</span>
+                        </div>
+                        <input id="login_pass" placeholder="mooc密码" type="text" class="form-control">
+                    </div>
+                    <input id="login_btn" type="button" class="btn btn-primary btn-block" value="登录获取" />
+                </div>
+                <div class="mb-3 mt-2" id="page2" style="display:none">
+                    <div class="input-group  mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">课程</span>
+                        </div>
+                        <select id="SelectCourse" class="form-control">
+                            <option value="0" selected>选择课程</option>
+                        </select>
+                    </div>
+                    <div class="input-group  mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">章节</span>
+                        </div>
+                        <select id="SelectChapter" class="form-control">
+                            <option value="0" selected>选择章节</option>
+                        </select>
+                    </div>
+                    <div class="input-group  mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">刷课内核</span>
+                        </div>
+                        <select id="SelectMode" class="form-control">
+                            <option value="0">【Flash内核刷课模式】</option>
+                            <option value="1">【H5内核刷课模式】</option>
+                            <option value="2" selected>【一键秒刷课模式】</option>
+                        </select>
+                    </div>
+                    <input id="startBrush_btn" type="button" class="btn btn-primary btn-block" value="立即刷课" />
+                    <input id="hiddenfunc_btn" type="button" class="mt-2 btn btn-info" value="隐藏功能" style="display:none;" />
+                </div>
+            </div>
+        </div>
+        <footer>
+            <a class="mt-2 btn btn-info" href="./file/mhyshelper.apk" download="美和易思助手.apk">安卓版本</a>
+            <a class="mt-2 btn btn-danger" href="http://www.zejang.cn/%e7%bd%91%e7%ab%99%e7%95%99%e8%a8%80">给我留言</a>
+            <a class="mt-2 btn btn-info" href="https://qm.qq.com/cgi-bin/qm/qr?k=OUZsTyG96ttZe1PUFrysH_mTd-iqz1S5&authKey=8WF9b9f+JgRRpXaL3uEzmUxzQwNpS5U/JYGDAKWzdTqPxkB3clyXVgk3gv5sLvuG&noverify=0">加QQ群</a>
+            <button type="button" class="btn btn-secondary mt-2" data-toggle="modal" data-target="#myModal">想说的话</button>
+            <div class="modal fade" id="myModal">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">给大家的话</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            这是我最后一个版本的刷课了，程序已经开源，自取。如果你热爱编程，你可以加入我的QQ群，我们一起学习。<br />【程序设计初衷是为了给系统没统计进度的同学使用！希望合理利用工具！学习是自己的事情！！！】
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <div class="card mt-3" id="page3" style="display:none;">
+            <div class="card-header">考试答案</div>
+            <div class="card-body">
+                <div class="input-group  mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">考试ID</span>
+                    </div>
+                    <input type="text" id="examid_tb" class="form-control" /><a href="http://cdn.zejang.cn/2020/07/TIM%E6%88%AA%E5%9B%BE20200703015153.png">如何获取ID？</a>
+                    <input id="getexamanswer_btn" type="button" class="btn btn-danger btn-block mt-3" value="立即获取" />
+                </div>
+                <div id="answers">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--右边学习菜单-->
+    <div id="Drawer" v-bind:style="myHeight" class="d-flex flex-row col-lg-4 col-md-5" style="position:fixed;top:0px;">
+        <div v-show="isShow" style="width:100%;height:100%;background-color:lightgray;">
+            <iframe style="width:100%;height:100%" src="http://www.zejang.cn"></iframe>
+        </div>
+        <div v-on:click="Tip" style="width:35px;height:100px;background-color:red;margin-top:36%;cursor:pointer;border-radius:5px;text-align:center">
+            <h3 style="margin-top:50%;color:azure">学<br />习</h3>
+        </div>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: "#Drawer",
+            data: {
+                isShow: false,
+                myHeight: ""
+            },
+            methods: {
+                Tip: function () {
+                    this.isShow = !this.isShow;
+                    if (this.isShow) {
+                        this.myHeight = "height:100%";
+                    } else {
+                        this.myHeight = "height:0%";
+                    }
+
+                    layer.msg("有什么好的建议，可以直接提出来哟！");
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1082
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MhysHelper", "MhysHelper\MhysHelper.csproj", "{6440E81B-D0B1-4DCF-84D6-48D1C35908ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MhysHelper.AspNetCore", "MhysHelper.AspNetCore\MhysHelper.AspNetCore.csproj", "{D5CCF716-787B-4A2F-9A86-78D5A85DDEDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{6440E81B-D0B1-4DCF-84D6-48D1C35908ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6440E81B-D0B1-4DCF-84D6-48D1C35908ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6440E81B-D0B1-4DCF-84D6-48D1C35908ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5CCF716-787B-4A2F-9A86-78D5A85DDEDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5CCF716-787B-4A2F-9A86-78D5A85DDEDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5CCF716-787B-4A2F-9A86-78D5A85DDEDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5CCF716-787B-4A2F-9A86-78D5A85DDEDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

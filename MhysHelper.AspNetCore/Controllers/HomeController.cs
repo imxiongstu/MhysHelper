@@ -1,10 +1,13 @@
-﻿using System;
+﻿using MhysHelper.AspNetCore.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using MhysHelper.Models;
-namespace MhysHelper.Controllers
+using System.Threading.Tasks;
+
+namespace MhysHelper.AspNetCore.Controllers
 {
     public class HomeController : Controller
     {
@@ -22,6 +25,5 @@ namespace MhysHelper.Controllers
             ViewBag.mode = mode;
             return View();
         }
-
     }
 }
